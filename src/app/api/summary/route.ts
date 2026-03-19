@@ -18,6 +18,7 @@ function getDaysRemaining(): number {
 }
 
 export async function GET() {
+  try {
   const currentWeek = getCurrentWeek();
 
   const [tasks, metrics, leadCounts, recentNotes] = await Promise.all([
@@ -52,4 +53,8 @@ export async function GET() {
     pipeline: pipelineMap,
     recentNotes,
   });
+  } catch (error) {
+    console.error("Summary API error:", error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
+  }
 }
